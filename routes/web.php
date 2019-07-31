@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('login', [ 'as' => 'login', 'uses' => 'Auth\LoginController@showLogin']);
+Route::get('/', function () { return Redirect::to('login'); });
+Route::post('sign-in','Auth\LoginController@doLogin');
+
+Route::middleware('auth')->get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+
+Route::middleware('auth')->get('detalles', ['as' => 'detalles', 'uses' => 'PlantillaDetallesController']);
+Route::middleware('auth')->get('concentrado', ['as' => 'concentrado', 'uses' => 'PlantillaConcentradoController']);
