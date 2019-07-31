@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        \App\User::create([
+            'username' => 'admin',
+            'password' => Hash::make('ssa.fuentes.2019.finan')
+        ]);
     }
 }
