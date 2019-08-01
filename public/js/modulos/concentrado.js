@@ -31,19 +31,6 @@ function actualizarRegistros(){
             'rgba(255, 206, 86, 0.2)',
             'rgba(75, 192, 192, 0.2)',
             'rgba(153, 102, 255, 0.2)',
-        ];
-        var chrtBorderColors = [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
         ];*/
 
         var registros = "";
@@ -52,15 +39,6 @@ function actualizarRegistros(){
         var total_percepcion = {total:0};
         var total_personas = 0;
 
-        var chrt_fuentes = [];
-        for(var i in data.fuentes){
-            fuentes +=  '<th>'+data.fuentes[i]+'</th>';
-            chrt_fuentes.push(data.fuentes[i]);
-        }
-        $('#titulo_fuentes').attr('colSpan',''+i);
-        $('#fuentes').html(fuentes);
-
-        //var chrt_tipos_nomina = [];
         var chrt_datasets = [];
         var colores = {};
         for(var i in data.personal){
@@ -88,7 +66,7 @@ function actualizarRegistros(){
                     }else{
                         total_percepcion[j] += registro.fuentes[j].total;
                     }
-                    chrt_datos_nomina.data.push(registro.fuentes[j].total);
+                    chrt_datos_nomina.data.push(roundToTwo(registro.fuentes[j].total));
                 }else{
                     registros += '<td class="text-center">$0.00</td>';
                     chrt_datos_nomina.data.push(0);
@@ -99,10 +77,17 @@ function actualizarRegistros(){
         }
 
         registros += '<tr class="bg-secondary text-white font-weight-bold"><td>Totales</td><td class="text-center">'+total_personas.format()+'</td><td class="text-center">$'+total_percepcion['total'].format(2)+'</td>';
-        for(var j in data.fuentes){
-            registros += '<td class="text-center">$'+total_percepcion[j].format(2)+'</td>';
+
+        var chrt_fuentes = [];
+        for(var i in data.fuentes){
+            registros += '<td class="text-center">$'+total_percepcion[i].format(2)+'</td>';
+
+            fuentes +=  '<th>'+data.fuentes[i]+'</th>';
+            chrt_fuentes.push(data.fuentes[i]+' $'+total_percepcion[i].format(2));
         }
         registros += '</tr>';
+        $('#titulo_fuentes').attr('colSpan',''+i);
+        $('#fuentes').html(fuentes);
 
         $('#concentrado_tipo_nomina').html(registros);
 
@@ -125,6 +110,19 @@ function actualizarRegistros(){
                     yAxes: [{
                         stacked: true
                     }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                            console.log(tooltipItem);
+                            if (label) {
+                                label += ': $';
+                            }
+                            label += tooltipItem.yLabel.format(2);
+                            return label;
+                        }
+                    }
                 }
             }
         });
@@ -143,3 +141,7 @@ Number.prototype.format = function(n, x) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
+
+function roundToTwo(num) {    
+    return +(Math.round(num + "e+2")  + "e-2");
+}
