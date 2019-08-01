@@ -27,6 +27,7 @@ class PlantillaDetallesController extends Controller
                             ->leftJoin('catalogo_programa','catalogo_programa.id','=','programa_id')
                             ->leftJoin('catalogo_fuente','catalogo_fuente.id','=','fuente_id')
                             ->where('ur','!=','610')
+                            ->orderBy('personal_instituto.descripcion')
                             ->groupBy('puesto');
 
         if(isset($parametros['group_tipo_nomina'])){
