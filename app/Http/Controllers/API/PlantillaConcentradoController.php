@@ -80,7 +80,8 @@ class PlantillaConcentradoController extends Controller
         foreach($lista_por_fuente_finan as $registro){
             if(!isset($personal[$registro->tipo_nomina_id]['fuentes'][$registro->fuente_id])){
                 $personal[$registro->tipo_nomina_id]['fuentes'][$registro->fuente_id] = [
-                    'total' => $registro->total_percepcion
+                    'total' => $registro->total_percepcion,
+                    'total_personas' => $registro->total_personas
                 ];
             }
             if(!isset($fuentes[$registro->fuente_id])){
