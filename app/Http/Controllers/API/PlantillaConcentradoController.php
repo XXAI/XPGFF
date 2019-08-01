@@ -24,10 +24,12 @@ class PlantillaConcentradoController extends Controller
         $lista_por_tipo_nomina = Personal::select('catalogo_tipo_nomina.descripcion as tipo_nomina', 'tipo_nomina_id',DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
                             ->leftJoin('catalogo_tipo_nomina','catalogo_tipo_nomina.id','=','tipo_nomina_id')
                             ->where('ur','!=','610')
+                            ->orderBy('catalogo_tipo_nomina.descripcion')
                             ->groupBy('tipo_nomina_id');
 
-        $lista_por_fuente_finan = Personal::select('tipo_nomina_id', 'catalogo_fuente.llave as fuente','fuente_id',DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
+        $lista_por_fuente_finan = Personal::select('catalogo_tipo_nomina.descripcion as tipo_nomina', 'tipo_nomina_id', 'catalogo_fuente.llave as fuente','fuente_id',DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
                             ->leftJoin('catalogo_fuente','catalogo_fuente.id','=','fuente_id')
+                            ->leftJoin('catalogo_tipo_nomina','catalogo_tipo_nomina.id','=','tipo_nomina_id')
                             ->where('ur','!=','610')
                             ->groupBy('tipo_nomina_id','fuente_id');
 
@@ -67,8 +69,8 @@ class PlantillaConcentradoController extends Controller
         $personal = [];
         $fuentes = [];
         foreach($lista_por_tipo_nomina as $registro){
-            if(!isset($personal[$registro->tipo_nomina_id])){
-                $personal[$registro->tipo_nomina_id] = [
+            if(!isset($personal[$registro->tipo_nomina])){
+                $personal[$registro->tipo_nomina] = [
                     'descripcion' => $registro->tipo_nomina,
                     'total' => $registro->total_percepcion,
                     'total_personas' => $registro->total_personas,
@@ -78,8 +80,8 @@ class PlantillaConcentradoController extends Controller
         }
 
         foreach($lista_por_fuente_finan as $registro){
-            if(!isset($personal[$registro->tipo_nomina_id]['fuentes'][$registro->fuente_id])){
-                $personal[$registro->tipo_nomina_id]['fuentes'][$registro->fuente_id] = [
+            if(!isset($personal[$registro->tipo_nomina]['fuentes'][$registro->fuente_id])){
+                $personal[$registro->tipo_nomina]['fuentes'][$registro->fuente_id] = [
                     'total' => $registro->total_percepcion,
                     'total_personas' => $registro->total_personas
                 ];
