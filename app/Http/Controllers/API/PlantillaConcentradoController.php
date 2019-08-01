@@ -19,8 +19,6 @@ class PlantillaConcentradoController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $personal = Personal::all();
-
         $parametros = Input::all();
 
         $lista_por_tipo_nomina = Personal::select('catalogo_tipo_nomina.descripcion as tipo_nomina', 'tipo_nomina_id',DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
@@ -46,6 +44,21 @@ class PlantillaConcentradoController extends Controller
         if($parametros['tipo_nomina_id']){
             $lista_por_tipo_nomina = $lista_por_tipo_nomina->where('tipo_nomina_id',$parametros['tipo_nomina_id']);
             $lista_por_fuente_finan = $lista_por_fuente_finan->where('tipo_nomina_id',$parametros['tipo_nomina_id']);
+        }
+
+        if($parametros['puesto']){
+            $lista_por_tipo_nomina = $lista_por_tipo_nomina->where('puesto',$parametros['puesto']);
+            $lista_por_fuente_finan = $lista_por_fuente_finan->where('puesto',$parametros['puesto']);
+        }
+
+        if($parametros['fecha_inicio']){
+            $lista_por_tipo_nomina = $lista_por_tipo_nomina->where('fissa','>=',$parametros['fecha_inicio']);
+            $lista_por_fuente_finan = $lista_por_fuente_finan->where('fissa','>=',$parametros['fecha_inicio']);
+        }
+
+        if($parametros['fecha_fin']){
+            $lista_por_tipo_nomina = $lista_por_tipo_nomina->where('fissa','<=',$parametros['fecha_fin']);
+            $lista_por_fuente_finan = $lista_por_fuente_finan->where('fissa','<=',$parametros['fecha_fin']);
         }
 
         $lista_por_tipo_nomina = $lista_por_tipo_nomina->get();

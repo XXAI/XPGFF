@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Fuente;
 use App\Models\TipoNomina;
 use App\Models\Programa;
-use App\Models\CLUES;
+use App\Models\Puesto;
 
 class PlantillaDetallesController extends Controller
 {
@@ -21,11 +21,11 @@ class PlantillaDetallesController extends Controller
         $datos = [
             'activo'=>'detalles',
             'mostrar_filtro'=>true,
-            'buscar'=>true,
-            'fuentes'=>Fuente::all(),
-            'tipos_nomina'=>TipoNomina::all(),
-            'programas' => Programa::all(),
-            'clues' => CLUES::all()
+            'mostrar_grupos'=>true,
+            'programas' => Programa::orderBy('descripcion')->get(),
+            'fuentes' => Fuente::orderBy('descripcion')->get(),
+            'tipos_nomina' => TipoNomina::orderBy('descripcion')->get(),
+            'puestos' => Puesto::orderBy('descripcion')->get()
         ];
         return view('plantilla-detalles',$datos);
     }

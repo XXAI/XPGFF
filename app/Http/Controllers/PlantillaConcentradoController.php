@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\Fuente;
 use App\Models\TipoNomina;
+use App\Models\Puesto;
 
 class PlantillaConcentradoController extends Controller
 {
@@ -23,6 +24,7 @@ class PlantillaConcentradoController extends Controller
             'programas' => Programa::orderBy('descripcion')->get(),
             'fuentes' => Fuente::orderBy('descripcion')->get(),
             'tipos_nomina' => TipoNomina::orderBy('descripcion')->get(),
+            'puestos' => Puesto::orderBy('descripcion')->get(),
         ];
         return view('plantilla-concentrado',$datos);
     }

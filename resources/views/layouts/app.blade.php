@@ -44,11 +44,13 @@
             <div class="bg-info text-white" style="padding:10px;">
                 <form id="formulario-filtro">
                     <div class="form-row">
-                        @if(isset($buscar))
+                        
                         <div class="form-group col">
-                            <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar">
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
                         </div>
-                        @endif
+                        <div class="form-group col">
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
+                        </div>
 
                         @if(isset($fuentes))
                         <div class="form-group col">
@@ -84,22 +86,38 @@
                         @endif
 
 
-                        @if(isset($clues))
+                        @if(isset($puestos))
                         <div class="form-group col">
-                            <select id="clues" name="clues" class="form-control">
-                                <option value='' selected>Seleccione una clues</option>
-                                @foreach($clues as $unidad)
-                                <option value='{{$unidad->clues}}'>{{$unidad->clues}} - {{$unidad->descripcion}}</option>
+                            <select id="puesto" name="puesto" class="form-control">
+                                <option value='' selected>Seleccione un puesto</option>
+                                @foreach($puestos as $puesto)
+                                <option value='{{$puesto->codigo}}'>{{$puesto->descripcion}}</option>
                                 @endforeach
                             </select>
                         </div>
                         @endif
 
+                        @if(isset($mostrar_grupos))
+                        <div class="col">
+                            <!--legend class="col-form-label">Agrupar Por:</legend-->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="group_tipo_nomina" name="group_tipo_nomina" value="1">
+                                <label class="form-check-label" for="group_tipo_nomina">Tipo Nomina</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="group_fuente" name="group_fuente" value="1">
+                                <label class="form-check-label" for="group_fuente">Fuente</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="group_programa" name="group_programa" value="1">
+                                <label class="form-check-label" for="group_programa">Programa</label>
+                            </div>
+                            <!--button type="button" class="btn btn-info"><i class="fas fa-file-excel"></i> Exportar</button-->
+                        </div>
+                        @endif
+
                         <div class="form-group col">
                             <button type="button" class="btn btn-primary btn-block" onclick="aplicarFiltro()"><i class="fas fa-search"></i> Buscar</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-info"><i class="fas fa-file-excel"></i> Exportar</button>
                         </div>
                     </div>
                 </form>
