@@ -34,6 +34,9 @@
                         <li class="nav-item {{(isset($activo) && $activo == 'detalles')?'active':''}}" >
                             <a class="nav-link" href="detalles">Detalles</a>
                         </li>
+                        <li class="nav-item {{(isset($activo) && $activo == 'personal-activo')?'active':''}}" >
+                            <a class="nav-link" href="personal-activo">Personal Activo</a>
+                        </li>
                     </ul>
                 </div>
             
@@ -41,87 +44,164 @@
             @endif
         </nav>
         @if(Auth::check() && isset($mostrar_filtro) && $mostrar_filtro)
-            <div class="bg-info text-white" style="padding:10px;">
-                <form id="formulario-filtro">
+            <form id="formulario-filtro">
+                <div class="bg-info text-white" style="padding:10px;">
                     <div class="form-row">
-                        
-                        <div class="form-group col">
-                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
-                        </div>
-                        <div class="form-group col">
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
-                        </div>
-
-                        @if(isset($fuentes))
-                        <div class="form-group col">
-                            <select id="fuente_id" name="fuente_id" class="form-control">
-                                <option value='' selected>Seleccione una fuente</option>
-                                @foreach($fuentes as $fuente)
-                                <option value='{{$fuente->id}}'>{{$fuente->descripcion}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-
-                        @if(isset($tipos_nomina))
-                        <div class="form-group col">
-                            <select id="tipo_nomina_id" name="tipo_nomina_id" class="form-control">
-                                <option value='' selected>Seleccione un tipo de nomina</option>
-                                @foreach($tipos_nomina as $tipo_nomina)
-                                <option value='{{$tipo_nomina->id}}'>{{$tipo_nomina->descripcion}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-
-                        @if(isset($programas))
-                        <div class="form-group col">
-                            <select id="programa_id" name="programa_id" class="form-control">
-                                <option value='' selected>Seleccione un programa</option>
-                                @foreach($programas as $programa)
-                                <option value='{{$programa->id}}'>{{$programa->descripcion}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-
-
-                        @if(isset($puestos))
-                        <div class="form-group col">
-                            <select id="puesto" name="puesto" class="form-control">
-                                <option value='' selected>Seleccione un puesto</option>
-                                @foreach($puestos as $puesto)
-                                <option value='{{$puesto->codigo}}'>{{$puesto->descripcion}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-
-                        @if(isset($mostrar_grupos))
                         <div class="col">
-                            <!--legend class="col-form-label">Agrupar Por:</legend-->
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="group_tipo_nomina" name="group_tipo_nomina" value="1">
-                                <label class="form-check-label" for="group_tipo_nomina">Tipo Nomina</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="group_fuente" name="group_fuente" value="1">
-                                <label class="form-check-label" for="group_fuente">Fuente</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="group_programa" name="group_programa" value="1">
-                                <label class="form-check-label" for="group_programa">Programa</label>
-                            </div>
-                            <!--button type="button" class="btn btn-info"><i class="fas fa-file-excel"></i> Exportar</button-->
-                        </div>
-                        @endif
+                            <div class="form-row">
+                                @if(isset($fuentes))
+                                <div class="form-group col-3">
+                                    <label for="fuente_id">Fuente</label>
+                                    <select id="fuente_id" name="fuente_id" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione una fuente</option>
+                                        @foreach($fuentes as $fuente)
+                                        <option value='{{$fuente->id}}'>{{$fuente->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
 
-                        <div class="form-group col">
-                            <button type="button" class="btn btn-primary btn-block" onclick="aplicarFiltro()"><i class="fas fa-search"></i> Buscar</button>
+                                @if(isset($tipos_nomina))
+                                <div class="form-group col-3">
+                                    <label for="tipo_nomina_id">Tipo Nomina</label>
+                                    <select id="tipo_nomina_id" name="tipo_nomina_id" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione un tipo de nomina</option>
+                                        @foreach($tipos_nomina as $tipo_nomina)
+                                        <option value='{{$tipo_nomina->id}}'>{{$tipo_nomina->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+
+                                @if(isset($programas))
+                                <div class="form-group col-3">
+                                    <label for="programa_id">Programa</label>
+                                    <select id="programa_id" name="programa_id" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione un programa</option>
+                                        @foreach($programas as $programa)
+                                        <option value='{{$programa->id}}'>{{$programa->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+
+                                @if(isset($puestos))
+                                <div class="form-group col-3">
+                                    <label for="puesto">Puesto</label>
+                                    <select id="puesto" name="puesto" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione un puesto</option>
+                                        @foreach($puestos as $puesto)
+                                        <option value='{{$puesto->codigo}}'>{{$puesto->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+
+                                @if(isset($ramas))
+                                <div class="form-group col-3">
+                                    <label for="rama_id">Rama</label>
+                                    <select id="rama_id" name="rama_id" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione una rama</option>
+                                        @foreach($ramas as $rama)
+                                        <option value='{{$rama->id}}'>{{$rama->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+
+                                @if(isset($profesiones))
+                                <div class="form-group col-3">
+                                    <label for="profesion_id">Profesión</label>
+                                    <select id="profesion_id" name="profesion_id" class="form-control form-control-sm">
+                                        <option value='' selected>Seleccione una profesión</option>
+                                        @foreach($profesiones as $profesion)
+                                        <option value='{{$profesion->id}}'>{{$profesion->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+
+                                @if(isset($mostrar_estatus))
+                                <div class="form-group col-3">
+                                    <label for="estatus">Estatus</label>
+                                    <select id="estatus" name="estatus" class="form-control form-control-sm">
+                                        <option value='' selected>Todos</option>
+                                        <option value='1'>Activos</option>
+                                        <option value='0'>Inactivos</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-3">
+                                    <label for="sindicato">Sindicato</label>
+                                    <select id="sindicato" name="sindicato" class="form-control form-control-sm">
+                                        <option value='' selected>Todos</option>
+                                        <option value='1'>Sindicalizados</option>
+                                        <option value='0'>No Sindicalizados</option>
+                                    </select>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        <!--div class="form-group col-1">
+                            <button type="button" class="btn btn-primary btn-block" onclick="aplicarFiltro()" style="height:100%;"><i class="fas fa-search"></i> Buscar</button>
+                        </div-->
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-inline">
+                                <label class="mr-2" for="fecha_inicio">Desde</label>
+                                <input type="date" class="form-control form-control-sm" id="fecha_inicio" name="fecha_inicio">
+                                <label class="ml-3 mr-2" for="fecha_fin">Hasta</label>
+                                <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-primary btn-block" style="height:100%;" onclick="aplicarFiltro()"><i class="fas fa-search"></i> Filtrar</button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+                @if(isset($mostrar_grupos))
+                <div class="bg-dark text-white" style="padding:5px;">
+                    <span>Separar los resultados por:</span>
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="group_tipo_nomina" name="group_tipo_nomina" value="1">
+                            <label class="custom-control-label" for="group_tipo_nomina">Tipo Nomina</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="group_fuente" name="group_fuente" value="1">
+                            <label class="custom-control-label" for="group_fuente">Fuente</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="group_programa" name="group_programa" value="1">
+                            <label class="custom-control-label" for="group_programa">Programa</label>
+                        </div>
+                    </div>
+
+                    @if(isset($mostrar_estatus))
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="group_rama" name="group_rama" value="1">
+                            <label class="custom-control-label" for="group_rama">Rama</label>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="group_profesion" name="group_profesion" value="1">
+                            <label class="custom-control-label" for="group_profesion">Profesion</label>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @endif
+            </form>
         @endif
         @section('raw_content')
         @show

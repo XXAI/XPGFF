@@ -25,6 +25,8 @@ class PlantillaConcentradoController extends Controller
             'fuentes' => Fuente::orderBy('descripcion')->get(),
             'tipos_nomina' => TipoNomina::orderBy('descripcion')->get(),
             'puestos' => Puesto::orderBy('descripcion')->get(),
+            //'ramos' => Puesto::orderBy('descripcion')->get(),
+            //'profesiones' => Puesto::orderBy('descripcion')->get(),
         ];
         return view('plantilla-concentrado',$datos);
     }
