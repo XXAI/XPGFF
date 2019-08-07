@@ -21,7 +21,7 @@ class PersonalActivoController extends Controller
     {
         $parametros = Input::all();
 
-        $lista_detalles = Personal::select('activo','comision_sindical','personal_instituto.descripcion as puesto', 'catalogo_tipo_nomina.descripcion as tipo_nomina','catalogo_rama.descripcion as rama',DB::raw('count(distinct rama_id) as conteo_rama'),'catalogo_profesion.descripcion as profesion',DB::raw('count(distinct profesion_id) as conteo_profesion'), DB::raw('count(distinct tipo_nomina_id) as conteo_nomina'), 'catalogo_programa.descripcion as programa', DB::raw('count(distinct programa_id) as conteo_programa'), 'catalogo_fuente.descripcion as fuente', DB::raw('count(distinct fuente_id) as conteo_fuente'), DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
+        $lista_detalles = Personal::select('activo','comision_sindical','personal_instituto.puesto as puesto_id','personal_instituto.descripcion as puesto', 'catalogo_tipo_nomina.descripcion as tipo_nomina','personal_instituto.tipo_nomina_id','catalogo_rama.descripcion as rama','personal_instituto.rama_id',DB::raw('count(distinct rama_id) as conteo_rama'),'catalogo_profesion.descripcion as profesion','personal_instituto.profesion_id',DB::raw('count(distinct profesion_id) as conteo_profesion'), DB::raw('count(distinct tipo_nomina_id) as conteo_nomina'), 'catalogo_programa.descripcion as programa','personal_instituto.programa_id', DB::raw('count(distinct programa_id) as conteo_programa'), 'catalogo_fuente.descripcion as fuente', 'personal_instituto.fuente_id',DB::raw('count(distinct fuente_id) as conteo_fuente'), DB::raw('sum(percepcion) as total_percepcion'), DB::raw('count(distinct rfc) as total_personas'))
                             ->leftJoin('catalogo_tipo_nomina','catalogo_tipo_nomina.id','=','tipo_nomina_id')
                             //->leftJoin('catalogo_puesto','catalogo_puesto.codigo','=','puesto')
                             ->leftJoin('catalogo_programa','catalogo_programa.id','=','programa_id')
@@ -29,29 +29,8 @@ class PersonalActivoController extends Controller
                             ->leftJoin('catalogo_profesion','catalogo_profesion.id','=','profesion_id')
                             ->leftJoin('catalogo_fuente','catalogo_fuente.id','=','fuente_id')
                             ->where('ur','!=','610')
-                            ->orderBy('personal_instituto.descripcion')
-                            ->groupBy('puesto');
+                            ->orderBy('personal_instituto.descripcion');
 
-        if(isset($parametros['group_tipo_nomina'])){
-            $lista_detalles = $lista_detalles->groupBy('tipo_nomina_id');
-        }
-
-        if(isset($parametros['group_fuente'])){
-            $lista_detalles = $lista_detalles->groupBy('fuente_id');
-        }
-
-        if(isset($parametros['group_programa'])){
-            $lista_detalles = $lista_detalles->groupBy('programa_id');
-        }
-
-        if(isset($parametros['group_rama'])){
-            $lista_detalles = $lista_detalles->groupBy('rama_id');
-        }
-
-        if(isset($parametros['group_profesion'])){
-            $lista_detalles = $lista_detalles->groupBy('profesion_id');
-        }
-        
         if(isset($parametros['estatus'])){
             if($parametros['estatus'] == 1){
                 $lista_detalles = $lista_detalles->where('activo',1);
@@ -100,13 +79,44 @@ class PersonalActivoController extends Controller
             $lista_detalles = $lista_detalles->where('fissa','<=',$parametros['fecha_fin']);
         }
 
+        $lista_totales = clone $lista_detalles;
+
+        $lista_detalles = $lista_detalles->groupBy('puesto');
+
+        if(isset($parametros['group_tipo_nomina'])){
+            $lista_detalles = $lista_detalles->groupBy('tipo_nomina_id');
+        }
+
+        if(isset($parametros['group_fuente'])){
+            $lista_detalles = $lista_detalles->groupBy('fuente_id');
+        }
+
+        if(isset($parametros['group_programa'])){
+            $lista_detalles = $lista_detalles->groupBy('programa_id');
+        }
+
+        if(isset($parametros['group_rama'])){
+            $lista_detalles = $lista_detalles->groupBy('rama_id');
+        }
+
+        if(isset($parametros['group_profesion'])){
+            $lista_detalles = $lista_detalles->groupBy('profesion_id');
+        }
+
         if(isset($parametros['page'])){
             $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 25;
+
             $lista_detalles = $lista_detalles->paginate($resultadosPorPagina);
+            
+            if($lista_detalles->lastPage() > 1){
+                $lista_totales = $lista_totales->select(DB::raw('count(distinct rfc) as total_personas'),DB::raw('sum(percepcion) as total_percepcion'))->get();
+            }else{
+                $lista_totales = [];
+            }
         } else {
             $lista_detalles = $lista_detalles->get();
         }
 
-        return response()->json(['paginado'=>$lista_detalles], HttpResponse::HTTP_OK);
+        return response()->json(['paginado'=>$lista_detalles,'totales'=>$lista_totales], HttpResponse::HTTP_OK);
     }
 }

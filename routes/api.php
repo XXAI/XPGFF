@@ -16,3 +16,4 @@ use Illuminate\Http\Request;
 Route::get('detalles', 'API\PlantillaDetallesController');
 Route::get('concentrado', 'API\PlantillaConcentradoController');
 Route::get('personal-activo', 'API\PersonalActivoController');
+Route::get('personal-activo-detalles', 'API\ListaDetallesPersonalController');

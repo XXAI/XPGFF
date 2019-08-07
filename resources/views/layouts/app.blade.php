@@ -19,7 +19,7 @@
         @section('javascript')
         @show
     </head>
-    <body style="padding-top:57px; padding-bottom:57px;">
+    <body style="padding-top:57px; padding-bottom:5px;">
         <nav class="navbar navbar-dark bg-dark navbar-expand-lg shadow fixed-top">
             <a class="navbar-brand" href="#">
                 <img src="{{asset('images/logo-estatal-icon.svg')}}" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -132,11 +132,11 @@
                                 </div>
 
                                 <div class="form-group col-3">
-                                    <label for="sindicato">Sindicato</label>
+                                    <label for="sindicato">Comision Sindical</label>
                                     <select id="sindicato" name="sindicato" class="form-control form-control-sm">
                                         <option value='' selected>Todos</option>
-                                        <option value='1'>Sindicalizados</option>
-                                        <option value='0'>No Sindicalizados</option>
+                                        <option value='1'>Comisionado</option>
+                                        <option value='0'>No Comisionado</option>
                                     </select>
                                 </div>
                                 @endif
