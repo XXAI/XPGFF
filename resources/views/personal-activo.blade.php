@@ -65,7 +65,22 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body" style="padding-left:0px; padding-right:0px; padding-top:0px;">
+
+        <div id="detalles-persona" class="modal-body bg-secondary text-white" style="height:50%;">
+            <button type="button" class="close" aria-label="Close" onclick="cerrarDetallesPersona()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div id="cargando-datos-persona" style="display:none;">
+                <div class="d-flex justify-content-center" >
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="panel-datos-persona" class="row" style="display:none;"></div>
+        </div>
+
+        <div id="paginado-detalles-personas" class="modal-body" style="padding-left:0px; padding-right:0px; padding-top:0px;">
             <form id="formulario-modal">
                 <input type="hidden" id="modal_puesto" name="modal_puesto">
                 <input type="hidden" id="modal_rama" name="modal_rama">

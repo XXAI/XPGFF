@@ -4,6 +4,8 @@ function aplicarFiltro(){
 }
 
 function actualizarRegistros(){
+    $('#lista-registros').html('<tr><th colspan="6" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></th></tr>');
+
     var parametros = $("#formulario-filtro").serialize();
     parametros += '&page='+$('#pagina-actual').val();
 
@@ -31,7 +33,7 @@ function actualizarRegistros(){
             total_personas += elemento.total_personas;
             total_percepcion += elemento.total_percepcion;
         }
-        registros += "<tr><th class='text-right' colspan='4'>Totales: </th><th class='text-center'>"+total_personas.format()+"</th><th class='text-center'>$"+total_percepcion.format(2)+"</th></tr>";
+        registros += "<tr class='bg-light'><th class='text-right' colspan='4'>SubTotal: </th><th class='text-center'>"+total_personas.format()+"</th><th class='text-center'>$"+total_percepcion.format(2)+"</th></tr>";
         $('#lista-registros').html(registros);
 
         $('#total-paginas').val(data['paginado'].last_page);
@@ -69,8 +71,8 @@ function actualizarPaginador(){
 }
 
 function cargarPagina(pagina=''){
-    var cargar_pagina = $('#pagina-actual').val();
-    var total_paginas = $('#total-paginas').val();
+    var cargar_pagina = $('#pagina-actual').val()*1;
+    var total_paginas = $('#total-paginas').val()*1;
     switch (pagina) {
         case 'siguiente':
             if(cargar_pagina < total_paginas){

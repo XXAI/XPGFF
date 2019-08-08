@@ -4,6 +4,8 @@ function aplicarFiltro(){
 }
 
 function actualizarRegistros(){
+    $('#lista-registros').html('<tr><th colspan="8" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>');
+
     var parametros = $("#formulario-filtro").serialize();
     parametros += '&page='+$('#pagina-actual').val();
 
@@ -103,8 +105,8 @@ function actualizarPaginador(){
 }
 
 function cargarPagina(pagina=''){
-    var cargar_pagina = $('#pagina-actual').val();
-    var total_paginas = $('#total-paginas').val();
+    var cargar_pagina = $('#pagina-actual').val()*1;
+    var total_paginas = $('#total-paginas').val()*1;
     switch (pagina) {
         case 'siguiente':
             if(cargar_pagina < total_paginas){
@@ -135,6 +137,12 @@ function cargarPagina(pagina=''){
 }
 
 function actualizarRegistrosModal(){
+    $('#detalles-persona').hide();
+    $('#panel-datos-persona').hide();
+    $('#cargando-datos-persona').hide();
+    $('#paginado-detalles-personas').css("height", "");
+    $('#lista-detalles').html('<tr><th colspan="6" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>');
+
     var parametros = $("#formulario-modal").serialize();
     parametros += '&fecha_inicio='+$('#fecha_inicio').val()+'&fecha_fin='+$('#fecha_fin').val()+'&estatus='+$('#estatus').val()+'&sindicato='+$('#sindicato').val()+'&page='+$('#modal-pagina-actual').val();
 
@@ -145,7 +153,7 @@ function actualizarRegistrosModal(){
         for(var i in data['paginado'].data){
             var elemento = data['paginado'].data[i];
 
-            registros += "<tr><td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td></tr>";
+            registros += "<tr onclick='mostrarDetallesPersona(this,"+elemento.id+");' style='cursor:pointer;'><td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td></tr>";
         }
 
         $('#lista-detalles').html(registros);
@@ -156,6 +164,64 @@ function actualizarRegistrosModal(){
 
         actualizarPaginadorModal();
     });
+}
+
+function mostrarDetallesPersona(el,id){
+    $('#lista-detalles tr.bg-info').removeClass('bg-info text-white');
+    $(el).addClass('bg-info text-white');
+    $('#detalles-persona').show();
+    $('#panel-datos-persona').hide();
+    $('#cargando-datos-persona').show();
+
+    $.get('api/datos-persona/'+id, null, function(data){
+        console.log(data.persona);
+        var persona = data.persona;
+        var html_info = "<div class='col-1 text-right font-weight-bold'>RFC</div>"+
+                        "<div class='col-2'><p>"+persona.rfc+"</p></div>"+
+                        "<div class='col-1 text-right font-weight-bold'>CURP</div>"+
+                        "<div class='col-2'><p>"+persona.curp+"</p></div>"+
+                        "<div class='col-2 text-right font-weight-bold'>Tipo Nomina</div>"+
+                        "<div class='col-4'><p>"+persona.tipo_nomina+"</p></div>"+
+
+                        "<div class='col-1 text-right font-weight-bold'>Nombre</div>"+
+                        "<div class='col-3'><p>"+persona.nombre+"</p></div>"+
+                        "<div class='col-2 text-right font-weight-bold'>Fecha Ingreso SSA</div>"+
+                        "<div class='col-2'><p>"+persona.fissa+"</p></div>"+
+                        "<div class='col-2 text-right font-weight-bold'>Fecha Ingreso Gobierno Federal</div>"+
+                        "<div class='col-2'><p>"+persona.figf+"</p></div>"+
+
+                        "<div class='col-1 text-right font-weight-bold'>Fuente</div>"+
+                        "<div class='col-3'><p>"+persona.fuente+"</p></div>"+
+                        "<div class='col-1 text-right font-weight-bold'>Programa</div>"+
+                        "<div class='col-2'><p>"+persona.programa+"</p></div>"+
+                        "<div class='col-1 text-right font-weight-bold'>Crespdes</div>"+
+                        "<div class='col-4'><p>"+persona.crespdes+"</p></div>"+
+                        
+                        "<div class='col-1 text-right font-weight-bold'>Puesto</div>"+
+                        "<div class='col-3'><p>"+persona.puesto+"</p></div>"+
+                        "<div class='col-1 text-right font-weight-bold'>Rama</div>"+
+                        "<div class='col-2'><p>"+persona.rama+"</p></div>"+
+                        "<div class='col-1 text-right font-weight-bold'>Profesion</div>"+
+                        "<div class='col-3'><p>"+persona.profesion+"</p></div>";
+        $('#panel-datos-persona').html(html_info);
+
+        $('#cargando-datos-persona').hide();
+        $('#panel-datos-persona').show();
+
+        $('#paginado-detalles-personas').css("height", "50%");
+
+        $('#modal-detalles-personal').modal('handleUpdate');
+    });
+
+}
+
+function cerrarDetallesPersona(){
+    $('#lista-detalles tr.bg-info').removeClass('bg-info text-white');
+    $('#detalles-persona').hide();
+
+    $('#paginado-detalles-personas').css("height", "");
+    
+    $('#modal-detalles-personal').modal('handleUpdate');
 }
 
 function actualizarPaginadorModal(){

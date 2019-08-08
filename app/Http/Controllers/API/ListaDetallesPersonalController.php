@@ -21,7 +21,7 @@ class ListaDetallesPersonalController extends Controller
     {
         $parametros = Input::all();
 
-        $lista_detalles = Personal::select('activo','comision_sindical','personal_instituto.rfc','personal_instituto.curp','personal_instituto.nombre','catalogo_puesto.descripcion as puesto', 'catalogo_rama.descripcion as rama','catalogo_profesion.descripcion as profesion','personal_instituto.clues')
+        $lista_detalles = Personal::select('personal_instituto.id','activo','comision_sindical','personal_instituto.rfc','personal_instituto.curp','personal_instituto.nombre','catalogo_puesto.descripcion as puesto', 'catalogo_rama.descripcion as rama','catalogo_profesion.descripcion as profesion','personal_instituto.clues')
                             ->leftJoin('catalogo_puesto','catalogo_puesto.codigo','=','puesto')
                             ->leftJoin('catalogo_rama','catalogo_rama.id','=','rama_id')
                             ->leftJoin('catalogo_profesion','catalogo_profesion.id','=','profesion_id')

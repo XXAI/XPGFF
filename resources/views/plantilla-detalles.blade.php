@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody id="lista-registros">
-            <tr><td colspan="6">Cargando</td></tr>
+            <tr><th colspan="6" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></th></tr>
         </tbody>
     </table>
 </div>
