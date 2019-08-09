@@ -20,3 +20,4 @@ Route::middleware('auth')->get('logout', ['as' => 'logout', 'uses' => 'Auth\Logi
 Route::middleware('auth')->get('personal-activo', ['as' => 'personal-activo', 'uses' => 'PersonalActivoController']);
 Route::middleware('auth')->get('detalles', ['as' => 'detalles', 'uses' => 'PlantillaDetallesController']);
 Route::middleware('auth')->get('concentrado', ['as' => 'concentrado', 'uses' => 'PlantillaConcentradoController']);
+Route::middleware('auth')->get('tabulador', ['as' => 'tabulador', 'uses' => 'TabuladorController']);

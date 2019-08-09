@@ -37,6 +37,9 @@
                         <li class="nav-item {{(isset($activo) && $activo == 'personal-activo')?'active':''}}" >
                             <a class="nav-link" href="personal-activo">Personal Activo</a>
                         </li>
+                        <li class="nav-item {{(isset($activo) && $activo == 'tabulador')?'active':''}}" >
+                            <a class="nav-link" href="tabulador">Tabulador</a>
+                        </li>
                     </ul>
                 </div>
             
@@ -155,6 +158,16 @@
                                 <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin">
                             </div>
                         </div>
+                        @if(isset($mostrar_filtro_pasantes))
+                        <div class="col-2">
+                            <div class="form-check form-check-inline">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="mostrar_pasantes" name="mostrar_pasantes" value="1">
+                                    <label class="custom-control-label" for="mostrar_pasantes">Mostrar Pasantes</label>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         <div class="col-2">
                             <button type="button" class="btn btn-primary btn-block" style="height:100%;" onclick="aplicarFiltro()"><i class="fas fa-search"></i> Filtrar</button>
                         </div>

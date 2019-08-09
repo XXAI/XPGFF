@@ -18,3 +18,4 @@ Route::get('concentrado', 'API\PlantillaConcentradoController');
 Route::get('personal-activo', 'API\PersonalActivoController');
 Route::get('personal-activo-detalles', 'API\ListaDetallesPersonalController');
 Route::get('datos-persona/{id}', 'API\DatosPersonaController');
+Route::get('tabulador', 'API\TabuladorController');
