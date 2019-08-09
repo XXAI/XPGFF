@@ -99,10 +99,11 @@
                             <th>PUESTO</th>
                             <th>RAMA</th>
                             <th>PROFESION</th>
+                            <th>PORPORCIONADO POR</th>
                         </tr>
                     </thead>
                     <tbody id="lista-detalles">
-                        <tr><th colspan="6" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>
+                        <tr><th colspan="7" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>
                     </tbody>
                 </table>
             </div>

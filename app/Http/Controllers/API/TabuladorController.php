@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Personal;
 use App\Models\TipoNomina;
 use App\Models\Fuente;
+use App\Models\CLUES;
 use App\Models\Tabulador;
 use DB;
 
@@ -26,12 +27,14 @@ class TabuladorController extends Controller
 
         $fuentes = Fuente::orderBy('descripcion')->get();
         $plazas = TipoNomina::orderBy('descripcion')->get();
+        $clues_niveles_atencion = CLUES::whereIn('clave_nivel',[1,2,6])->pluck('clave_nivel','clues');
+        $niveles_atencion = CLUES::select('clave_nivel','nivel_atencion')->whereIn('clave_nivel',[1,2,6])->groupBy('clave_nivel')->get();
         $tabulador = Tabulador::all();
 
-        $personal = Personal::select('personal_instituto.tipo_nomina_id','personal_instituto.fuente_id','personal_instituto.puesto','catalogo_puesto.tabulador_id',DB::raw('count(distinct rfc) as num_empleados'))
+        $personal = Personal::select('personal_instituto.tipo_nomina_id','personal_instituto.fuente_id','personal_instituto.puesto','catalogo_puesto.tabulador_id','personal_instituto.clues',DB::raw('count(distinct rfc) as num_empleados'))
                             ->leftJoin('catalogo_puesto','catalogo_puesto.codigo','=','personal_instituto.puesto')
                             ->leftJoin('catalogo_tabulador','catalogo_tabulador.id','=','catalogo_puesto.tabulador_id')
-                            ->groupBy('personal_instituto.tipo_nomina_id','personal_instituto.fuente_id','catalogo_puesto.tabulador_id');
+                            ->groupBy('personal_instituto.tipo_nomina_id','personal_instituto.fuente_id','personal_instituto.clues','catalogo_puesto.tabulador_id');
 
         if($parametros['programa_id']){
             $personal = $personal->where('programa_id',$parametros['programa_id']);
@@ -75,6 +78,7 @@ class TabuladorController extends Controller
 
         $tabla_fuentes = [];
         $tabla_plazas = [];
+        $tabla_nivel = [];
 
         foreach($fuentes as $fuente){
             $tabla_fuentes[$fuente->id] = ['fuente'=>$fuente->descripcion, 'tabulador'=>[]];
@@ -82,6 +86,14 @@ class TabuladorController extends Controller
 
         foreach($plazas as $plaza){
             $tabla_plazas[$plaza->id] = ['plaza'=>$plaza->descripcion, 'tabulador'=>[]];
+        }
+
+        foreach($niveles_atencion as $nivel){
+            if($nivel->clave_nivel != 6){
+                $tabla_nivel[$nivel->clave_nivel] = ['nivel'=>$nivel->nivel_atencion, 'total'=>0];
+            }else{
+                $tabla_nivel[$nivel->clave_nivel] = ['nivel'=>'OFICINAS DE APOYO', 'total'=>0];
+            }
         }
 
         foreach($personal as $persona){
@@ -96,8 +108,14 @@ class TabuladorController extends Controller
             }else{
                 $tabla_plazas[$persona->tipo_nomina_id]['tabulador'][$persona->tabulador_id] += $persona->num_empleados;
             }
+
+            if(isset($clues_niveles_atencion[$persona->clues])){
+                if(isset($tabla_nivel[$clues_niveles_atencion[$persona->clues]])){
+                    $tabla_nivel[$clues_niveles_atencion[$persona->clues]]['total'] += $persona->num_empleados;
+                }
+            }
         }
 
-        return response()->json(['fuentes'=>$tabla_fuentes,'plazas'=>$tabla_plazas, 'tabuladores'=>$tabulador], HttpResponse::HTTP_OK);
+        return response()->json(['fuentes'=>$tabla_fuentes,'plazas'=>$tabla_plazas, 'niveles_atencion'=>$tabla_nivel, 'tabuladores'=>$tabulador], HttpResponse::HTTP_OK);
     }
 }

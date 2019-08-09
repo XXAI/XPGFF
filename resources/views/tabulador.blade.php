@@ -9,6 +9,13 @@
 @section('raw_content')
 <div style="padding:10px;">
     <br>
+
+    <div class="table-responsive">
+        <table id="tabla-por-nivel-atencion" class="table table-sm table-hover shadow">
+            <thead class="thead-dark text-center"></thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <div class="table-responsive">
         <table id="tabla-por-fuente" class="table table-sm table-hover shadow">
             <thead class="thead-dark text-center">

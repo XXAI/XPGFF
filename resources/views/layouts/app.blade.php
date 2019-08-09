@@ -130,7 +130,7 @@
                                     <select id="estatus" name="estatus" class="form-control form-control-sm">
                                         <option value='' selected>Todos</option>
                                         <option value='1'>Activos</option>
-                                        <option value='0'>Inactivos</option>
+                                        <option value='0'>No Activos</option>
                                     </select>
                                 </div>
 

@@ -153,7 +153,7 @@ function actualizarRegistrosModal(){
         for(var i in data['paginado'].data){
             var elemento = data['paginado'].data[i];
 
-            registros += "<tr onclick='mostrarDetallesPersona(this,"+elemento.id+");' style='cursor:pointer;'><td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td></tr>";
+            registros += "<tr onclick='mostrarDetallesPersona(this,"+elemento.id+");' style='cursor:pointer;'><td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td><td>"+elemento.proporcionado_por+"</td></tr>";
         }
 
         $('#lista-detalles').html(registros);
