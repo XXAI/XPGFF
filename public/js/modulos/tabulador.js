@@ -13,12 +13,14 @@ function actualizarRegistros(){
 
         var header_nivel_atencion = '<tr>';
         var body_nivel_atencion = '<tr>';
+        var total_nivel_atencion = 0;
         for(var i in data.niveles_atencion){
             header_nivel_atencion += '<th>'+data.niveles_atencion[i].nivel+'</th>';
             body_nivel_atencion += '<td class="text-center">'+data.niveles_atencion[i].total.format()+'</td>';
+            total_nivel_atencion += data.niveles_atencion[i].total;
         }
-        header_nivel_atencion += '</tr>';
-        body_nivel_atencion += '</tr>';
+        header_nivel_atencion += '<th>TOTAL</th></tr>';
+        body_nivel_atencion += '<td class="bg-light text-center">'+total_nivel_atencion.format()+'</td></tr>';
 
         $('#tabla-por-nivel-atencion thead').html(header_nivel_atencion);
         $('#tabla-por-nivel-atencion tbody').html(body_nivel_atencion);
