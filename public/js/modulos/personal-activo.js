@@ -153,7 +153,19 @@ function actualizarRegistrosModal(){
         for(var i in data['paginado'].data){
             var elemento = data['paginado'].data[i];
 
-            registros += "<tr onclick='mostrarDetallesPersona(this,"+elemento.id+");' style='cursor:pointer;'><td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td><td>"+elemento.proporcionado_por+"</td></tr>";
+            var activo = 'text-info';
+            if(!elemento.activo){
+                activo = 'text-muted';
+            }
+
+            var icono = '';
+            if(elemento.comision_sindical){
+                icono = '<td><i class="fas fa-users '+activo+'"></i></td>';
+            }else{
+                icono = '<td><i class="fas fa-user '+activo+'"></i></td>';
+            }
+            
+            registros += "<tr onclick='mostrarDetallesPersona(this,"+elemento.id+");' style='cursor:pointer;'>"+icono+"<td>"+elemento.rfc+"</td><td>"+elemento.curp+"</td><td>"+elemento.nombre+"</td><td>"+elemento.puesto+"</td><td>"+elemento.rama+"</td><td>"+elemento.profesion+"</td><td>"+elemento.proporcionado_por+"</td></tr>";
         }
 
         $('#lista-detalles').html(registros);
@@ -202,7 +214,10 @@ function mostrarDetallesPersona(el,id){
                         "<div class='col-1 text-right font-weight-bold'>Rama</div>"+
                         "<div class='col-2'><p>"+persona.rama+"</p></div>"+
                         "<div class='col-1 text-right font-weight-bold'>Profesion</div>"+
-                        "<div class='col-3'><p>"+persona.profesion+"</p></div>";
+                        "<div class='col-4'><p>"+persona.profesion+"</p></div>";
+        if(persona.comision_sindical){
+            html_info += "<div class='col-1 text-right font-weight-bold'>Comisión Sindical</div>"+"<div class='col-3'><p>"+persona.seccion+"</p></div>";
+        }
         $('#panel-datos-persona').html(html_info);
 
         $('#cargando-datos-persona').hide();

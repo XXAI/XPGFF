@@ -93,6 +93,7 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-dark">
                         <tr class="text-center">
+                            <th width="1"></th>
                             <th>RFC</th>
                             <th>CURP</th>
                             <th>NOMBRE</th>
@@ -103,7 +104,7 @@
                         </tr>
                     </thead>
                     <tbody id="lista-detalles">
-                        <tr><th colspan="7" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>
+                        <tr><th colspan="8" class="text-center"><i class="fas fa-spinner fa-pulse"></i> Cargando...</th></tr>
                     </tbody>
                 </table>
             </div>

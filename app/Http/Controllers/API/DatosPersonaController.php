@@ -18,7 +18,7 @@ class DatosPersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request, $id){
-        $persona = Personal::select('personal_instituto.id','activo','comision_sindical','personal_instituto.rfc','personal_instituto.curp','personal_instituto.nombre','personal_instituto.crespdes','personal_instituto.fissa','personal_instituto.figf','catalogo_puesto.descripcion as puesto', 'catalogo_rama.descripcion as rama','catalogo_profesion.descripcion as profesion','catalogo_programa.descripcion as programa','catalogo_fuente.descripcion as fuente','catalogo_tipo_nomina.descripcion as tipo_nomina')
+        $persona = Personal::select('personal_instituto.id','activo','comision_sindical','personal_instituto.rfc','personal_instituto.curp','personal_instituto.nombre','personal_instituto.crespdes','personal_instituto.fissa','personal_instituto.figf','catalogo_puesto.descripcion as puesto', 'catalogo_rama.descripcion as rama','catalogo_profesion.descripcion as profesion','catalogo_programa.descripcion as programa','catalogo_fuente.descripcion as fuente','catalogo_tipo_nomina.descripcion as tipo_nomina','personal_instituto.comision_sindical','personal_instituto.seccion')
                             ->leftJoin('catalogo_puesto','catalogo_puesto.codigo','=','puesto')
                             ->leftJoin('catalogo_rama','catalogo_rama.id','=','rama_id')
                             ->leftJoin('catalogo_profesion','catalogo_profesion.id','=','profesion_id')
